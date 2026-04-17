@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BACKLOG // PAINEL EXECUTIVO</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #0c0e14;
+  --bg2:     #111520;
+  --bg3:     #161b28;
+  --panel:   #1a2035;
+  --border:  #232d42;
+  --cyan:    #00e5ff;
+  --pink:    #ff2d78;
+  --purple:  #9d4edd;
+  --yellow:  #ffd60a;
+  --green:   #39ff14;
+  --orange:  #ff8c00;
+  --text:    #d4dff0;
+  --muted:   #4a5870;
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-ui:   'Exo 2', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 10% 0%, rgba(0,229,255,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 90% 100%, rgba(157,78,221,0.06) 0%, transparent 60%);
+}
+
+/* ── HEADER ── */
+.header {
+  padding: 24px 36px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.header-accent {
+  width: 4px;
+  height: 48px;
+  background: linear-gradient(180deg, var(--cyan), var(--purple));
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.header-text h1 {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  background: linear-gradient(120deg, #fff 30%, var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.header-text p {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  margin-top: 3px;
+}
+.header-counters {
+  margin-left: auto;
+  display: flex;
+  gap: 28px;
+}
+.counter { text-align: right; }
+.counter .val {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 26px;
+  color: var(--cyan);
+  line-height: 1;
+}
+.counter .lbl {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 36px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.search-wrap { position: relative; flex: 1; min-width: 180px; max-width: 300px; }
+.search-wrap input {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 10px 12px 10px 36px;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color .2s;
+}
+.search-wrap input:focus { border-color: var(--cyan); }
+.search-wrap::before {
+  content: '⌕';
+  position: absolute;
+  left: 11px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 17px;
+  pointer-events: none;
+}
+
+.sel-wrap { display: flex; flex-direction: column; gap: 3px; }
+.sel-wrap label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+select {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 9px 11px;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color .2s;
+}
+select:focus { border-color: var(--cyan); }
+
+.btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  padding: 10px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  transition: all .15s;
+  white-space: nowrap;
+  align-self: flex-end;
+}
+.btn:hover { border-color: var(--cyan); color: var(--cyan); }
+
+.btn-playnow {
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 2px;
+  padding: 10px 20px;
+  align-self: flex-end;
+}
+.btn-playnow:hover { opacity: .88; color: #fff; border: none; transform: scale(1.02); }
+
+/* ── QUICK TAGS ── */
+.quickbar {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 36px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.qlabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-right: 2px;
+}
+.qtag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.qtag:hover { color: var(--text); border-color: var(--text); }
+.qtag.active { background: var(--purple); border-color: var(--purple); color: #fff; }
+
+/* ── RESULT BAR ── */
+.resultbar {
+  padding: 7px 36px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  letter-spacing: 1px;
+}
+.resultbar span { color: var(--cyan); }
+
+/* ── TABLE ── */
+.table-scroll { overflow-x: auto; padding: 0 36px 48px; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 14px;
+}
+
+thead tr { border-bottom: 2px solid var(--border); }
+
+th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 12px 16px;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: color .15s;
+}
+th:hover { color: var(--cyan); }
+th.sorted { color: var(--cyan); }
+
+tbody tr {
+  border-bottom: 1px solid rgba(35,45,66,.6);
+  transition: background .1s;
+}
+tbody tr:hover { background: rgba(0,229,255,.035); }
+
+td {
+  padding: 13px 16px;
+  vertical-align: middle;
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+
+.td-n { font-family: var(--font-mono); font-size: 11px; color: var(--muted); width: 38px; }
+.td-name { font-weight: 700; color: #e8f0fc; min-width: 200px; max-width: 250px; }
+.td-cat { white-space: nowrap; }
+
+/* CATEGORY BADGES */
+.badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 3px 9px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.b-acao      { background: rgba(255,45,120,.15);  color: var(--pink);   border:1px solid rgba(255,45,120,.3); }
+.b-terror    { background: rgba(157,78,221,.15);  color: var(--purple); border:1px solid rgba(157,78,221,.3); }
+.b-rpg       { background: rgba(255,214,10,.12);  color: var(--yellow); border:1px solid rgba(255,214,10,.25); }
+.b-souls     { background: rgba(57,255,20,.1);    color: var(--green);  border:1px solid rgba(57,255,20,.2); }
+.b-narrativa { background: rgba(0,229,255,.1);    color: var(--cyan);   border:1px solid rgba(0,229,255,.2); }
+.b-fps       { background: rgba(255,100,50,.13);  color: #ff6432;       border:1px solid rgba(255,100,50,.25); }
+.b-estrategia{ background: rgba(255,140,0,.12);   color: var(--orange); border:1px solid rgba(255,140,0,.25); }
+.b-corrida   { background: rgba(180,200,255,.08); color: #8ba4d4;       border:1px solid rgba(180,200,255,.15); }
+.b-simulacao { background: rgba(100,220,180,.1);  color: #5cd6b4;       border:1px solid rgba(100,220,180,.2); }
+.b-indie     { background: rgba(190,130,255,.1);  color: #c49cf5;       border:1px solid rgba(190,130,255,.2); }
+
+/* DURAÇÃO */
+.td-dur { font-family: var(--font-mono); font-size: 13px; white-space: nowrap; }
+
+/* ENGATE */
+.engate { font-family: var(--font-mono); font-size: 12px; font-weight: 700; white-space: nowrap; }
+.e-rapido { color: var(--green); }
+.e-medio  { color: var(--yellow); }
+.e-lento  { color: var(--pink); }
+
+/* VALHALLA DOTS */
+.vbar { display: flex; gap: 4px; align-items: center; }
+.vdot { width: 9px; height: 9px; border-radius: 50%; background: var(--border); }
+.vbar.v1 .vdot:nth-child(-n+1) { background: var(--green); }
+.vbar.v2 .vdot:nth-child(-n+2) { background: #9ef01a; }
+.vbar.v3 .vdot:nth-child(-n+3) { background: var(--yellow); }
+.vbar.v4 .vdot:nth-child(-n+4) { background: var(--orange); }
+.vbar.v5 .vdot:nth-child(-n+5) { background: var(--pink); }
+
+/* CARGA */
+.carga { font-family: var(--font-mono); font-size: 12px; font-weight: 600; white-space: nowrap; }
+.c-baixa  { color: var(--green); }
+.c-media  { color: var(--cyan); }
+.c-alta   { color: var(--yellow); }
+.c-maxima { color: var(--pink); }
+
+/* DOPAMINA */
+.td-dopa { font-size: 12.5px; color: #8fa0bc; min-width: 180px; max-width: 230px; line-height: 1.5; }
+
+/* EMPTY */
+.empty {
+  display: none;
+  text-align: center;
+  padding: 60px;
+  font-family: var(--font-mono);
+  color: var(--muted);
+  letter-spacing: 3px;
+  font-size: 13px;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+@media (max-width: 700px) {
+  .header, .topbar, .quickbar, .resultbar, .table-scroll { padding-left: 16px; padding-right: 16px; }
+  .header { flex-wrap: wrap; }
+  .header-counters { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-accent"></div>
+  <div class="header-text">
+    <h1>BACKLOG // PAINEL EXECUTIVO</h1>
+    <p>// SISTEMA ANTI-PARALISIA // ANTI-TDAH // v2.0</p>
+  </div>
+  <div class="header-counters">
+    <div class="counter">
+      <span class="val" id="cTotal">0</span>
+      <span class="lbl">Total</span>
+    </div>
+    <div class="counter">
+      <span class="val" id="cVisible">0</span>
+      <span class="lbl">Filtrados</span>
+    </div>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="search-wrap">
+    <input type="text" id="srch" placeholder="buscar jogo ou dopamina..." autocomplete="off">
+  </div>
+
+  <div class="sel-wrap">
+    <label>Engate</label>
+    <select id="fEngate">
+      <option value="">Todos</option>
+      <option value="Rápido">⚡ Rápido</option>
+      <option value="Médio">⏱ Médio</option>
+      <option value="Lento">🐢 Lento</option>
+    </select>
+  </div>
+
+  <div class="sel-wrap">
+    <label>Valhalla máx.</label>
+    <select id="fValhalla">
+      <option value="">Todos</option>
+      <option value="1">● 1 — Zero gordura</option>
+      <option value="2">●● 2 — Quase limpo</option>
+      <option value="3">●●● 3 — Tolerável</option>
+    </select>
+  </div>
+
+  <div class="sel-wrap">
+    <label>Carga cognitiva</label>
+    <select id="fCarga">
+      <option value="">Todas</option>
+      <option value="Baixa">🟢 Baixa</option>
+      <option value="Média">🔵 Média</option>
+      <option value="Alta">🟡 Alta</option>
+      <option value="Máxima">🔴 Máxima</option>
+    </select>
+  </div>
+
+  <div class="sel-wrap">
+    <label>Categoria</label>
+    <select id="fCat">
+      <option value="">Todas</option>
+      <option value="acao">Ação</option>
+      <option value="terror">Terror</option>
+      <option value="rpg">RPG</option>
+      <option value="souls">Soulslike</option>
+      <option value="narrativa">Narrativa</option>
+      <option value="fps">FPS</option>
+      <option value="estrategia">Estratégia</option>
+      <option value="corrida">Corrida</option>
+      <option value="simulacao">Simulação</option>
+      <option value="indie">Indie</option>
+    </select>
+  </div>
+
+  <button class="btn" onclick="reset()">✕ Reset</button>
+  <button class="btn btn-playnow" onclick="playNow()">⚡ JOGAR AGORA</button>
+</div>
+
+<div class="quickbar">
+  <span class="qlabel">Bateria:</span>
+  <button class="qtag" data-q="destruido">🔋 Destruído — carga baixa + engate rápido</button>
+  <button class="qtag" data-q="foco">⚡ Com foco — carga alta</button>
+  <button class="qtag" data-q="historia">📖 Quero história</button>
+  <button class="qtag" data-q="curto">🕐 Menos de 15h</button>
+  <button class="qtag" data-q="sempadding">🚫 Zero padding (Valhalla 1)</button>
+</div>
+
+<div class="resultbar">
+  EXIBINDO <span id="rVisible">0</span> DE <span id="rTotal">0</span> JOGOS
+</div>
+
+<div class="table-scroll">
+  <table>
+    <thead>
+      <tr>
+        <th class="td-n">#</th>
+        <th data-s="name">JOGO <span>↕</span></th>
+        <th data-s="cat">CATEGORIA <span>↕</span></th>
+        <th data-s="dur">⏱ DURAÇÃO <span>↕</span></th>
+        <th data-s="eng">🎣 ENGATE <span>↕</span></th>
+        <th data-s="val">😴 VALHALLA <span>↕</span></th>
+        <th data-s="car">🧠 CARGA <span>↕</span></th>
+        <th>💉 FATOR DOPAMINA</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <div class="empty" id="empty">// NENHUM RESULTADO. LIMPE OS FILTROS. //</div>
+</div>
+
+<script>
+// [nome, cat, durH, engate, valhalla, carga, dopamina]
+const G = [
+  ["Inazuma Eleven: Victory Road","rpg",40,"Médio",2,"Alta","Gestão de time / JRPG esportivo profundo"],
+  ["Hordes of Hunger","simulacao",20,"Rápido",2,"Média","Sobrevivência caótica / Tensão constante"],
+  ["Armored Core VI: Fires of Rubicon","acao",15,"Rápido",1,"Alta","Combate de mechs preciso / Chefes épicos"],
+  ["Fatal Frame II Remake","terror",10,"Médio",1,"Alta","Terror fotográfico / Atmosfera opressiva"],
+  ["Red Dead Redemption 2","acao",50,"Lento",3,"Média","Narrativa cinematográfica / Western épico"],
+  ["Spider-Man 2","acao",17,"Rápido",1,"Baixa","Navegação fluida / Combate espetacular"],
+  ["The Last of Us","narrativa",15,"Rápido",1,"Média","Narrativa devastadora / Tensão constante"],
+  ["Ghost of Tsushima","acao",25,"Rápido",2,"Baixa","Combate samurai elegante / Beleza visual"],
+  ["Uncharted: Legacy of Thieves","acao",15,"Rápido",1,"Baixa","Ação cinematográfica pura / Adrenalina imediata"],
+  ["God of War (2018)","acao",20,"Rápido",2,"Média","Combate visceral / Relação pai e filho"],
+  ["God of War: Ragnarök","acao",25,"Rápido",2,"Média","Narrativa épica nórdica / Combate refinado"],
+  ["Cyberpunk 2077","acao",25,"Médio",2,"Média","Mundo vivo / Side quests com profundidade real"],
+  ["Silent Hill F","terror",15,"Médio",1,"Alta","Terror psicológico / Atmosfera sufocante"],
+  ["Elden Ring","souls",60,"Rápido",2,"Alta","Exploração orgânica / Superação / Chefes épicos"],
+  ["Hitman: World of Assassination","acao",30,"Rápido",1,"Média","Criatividade sadística / Sandbox de assassinatos"],
+  ["Dying Light: The Beast","acao",20,"Rápido",2,"Média","Parkour frenético / Combate visceral"],
+  ["Ninja Gaiden 4","acao",15,"Rápido",1,"Alta","Combate técnico preciso / Velocidade absurda"],
+  ["Sekiro: Shadows Die Twice","souls",30,"Médio",1,"Máxima","O melhor sistema de parry já feito / Superação pura"],
+  ["Vampire: The Masquerade – Bloodlines 2","rpg",25,"Médio",2,"Média","Narrativa dark / Poderes vampíricos / Escolhas morais"],
+  ["Kingdom Come: Deliverance II","rpg",40,"Lento",2,"Alta","Imersão histórica total / RPG realista sem magia"],
+  ["The Witcher 3","rpg",50,"Médio",2,"Média","Side quests com narrativa própria / Mundo vivo"],
+  ["Dead Space","terror",12,"Rápido",1,"Média","Terror sci-fi / Desmembramento tático / Tensão"],
+  ["The Outer Worlds 2","rpg",20,"Rápido",2,"Média","RPG sci-fi com humor / Escolhas com peso real"],
+  ["Spider-Man: Miles Morales","acao",12,"Rápido",1,"Baixa","Estilo visual explosivo / Combate fluido"],
+  ["Baldur's Gate 3","rpg",80,"Médio",2,"Alta","Narrativa profunda / Liberdade absurda de escolha"],
+  ["Zelda: Breath of the Wild / Tears of the Kingdom","acao",50,"Rápido",2,"Baixa","Exploração orgânica / Criatividade irrestrita"],
+  ["Silent Hill 2","terror",10,"Médio",1,"Alta","Terror psicológico clássico / Narrativa traumática"],
+  ["Rise of the Ronin","acao",30,"Médio",3,"Média","Combate samurai / Narrativa histórica japonesa"],
+  ["Hades II","souls",25,"Rápido",1,"Média","Loop viciante anti-TDAH / Progresso constante garantido"],
+  ["Dark Souls 3","souls",30,"Rápido",1,"Alta","Superação absurda / Chefes mais memoráveis da série"],
+  ["Cronos: The New Dawn","terror",15,"Médio",1,"Média","Sci-fi sombrio / Atmosfera opressiva"],
+  ["Alan Wake 2","terror",15,"Rápido",1,"Alta","Terror psicológico / Visual alucinante / Meta-narrativa"],
+  ["Metal Gear Solid Δ: Snake Eater","acao",15,"Médio",1,"Média","Narrativa icônica / Espionagem / Cinema interativo"],
+  ["Yakuza: Like a Dragon","rpg",50,"Lento",2,"Média","Humor absurdo japonês / RPG de turno caótico"],
+  ["Horizon: Zero Dawn","acao",30,"Médio",3,"Média","Mundo pós-apocalíptico / Caçada de máquinas"],
+  ["Horizon: Forbidden West","acao",35,"Médio",3,"Média","Visual espetacular / Caçada evoluída de máquinas"],
+  ["S.T.A.L.K.E.R. 2","fps",40,"Médio",2,"Alta","Atmosfera opressiva / Sobrevivência tensa / Zona viva"],
+  ["Clair Obscur: Expedition 33","rpg",30,"Rápido",1,"Média","RPG visual deslumbrante / Narrativa europeia única"],
+  ["Goodnight Universe","indie",5,"Rápido",1,"Baixa","Experiência contemplativa / Indie curto e único"],
+  ["My Little Puppy","indie",3,"Rápido",1,"Baixa","Casual relaxante / Palate cleanser perfeito"],
+  ["Keeper","indie",5,"Rápido",1,"Baixa","Narrativa indie contemplativa"],
+  ["The Midnight Walk","indie",6,"Rápido",1,"Baixa","Terror atmosférico indie / Visual argiloso único"],
+  ["The Invincible","narrativa",6,"Rápido",1,"Baixa","Sci-fi narrativo / Walking sim filosófico"],
+  ["Beacon Pines","indie",5,"Rápido",1,"Baixa","Narrativa fofa com peso emocional"],
+  ["The Vale: Shadow of the Crown","indie",5,"Rápido",1,"Baixa","Experiência acessível / Design sonoro"],
+  ["Sancticide","acao",10,"Médio",1,"Média","Ação indie sombria / Mundo único"],
+  ["Warhammer 40,000: Dakka Squadron","corrida",10,"Rápido",2,"Média","Combate aéreo caótico no universo WH40K"],
+  ["Everspace 2","simulacao",30,"Rápido",2,"Média","Exploração espacial fluida / Combate satisfatório"],
+  ["Warhammer 40,000: Speed Freeks","corrida",10,"Rápido",2,"Baixa","Corrida caótica orka / WH40K"],
+  ["Wreckfest 2","corrida",15,"Rápido",2,"Baixa","Destruição pura / Corrida sem frescura"],
+  ["Sonic Racing: CrossWorlds","corrida",10,"Rápido",1,"Baixa","Velocidade imediata / Diversão sem pensar"],
+  ["LEGO Marvel's Avengers","acao",12,"Rápido",2,"Baixa","Humor / Nostalgia / Relaxante total"],
+  ["Life is Strange (Original)","narrativa",10,"Médio",2,"Baixa","Drama emocional / Escolhas com peso"],
+  ["Life is Strange: Double Exposure","narrativa",10,"Médio",2,"Baixa","Drama emocional / Mistério / Continuação"],
+  ["Bayonetta 2","acao",12,"Rápido",1,"Média","Combate estiloso absurdo / Caos visual elegante"],
+  ["Vanquish","fps",8,"Rápido",1,"Média","Combate frenético insano / Ritmo que não para"],
+  ["Get Even","narrativa",8,"Médio",1,"Média","Thriller psicológico / Narrativa não-linear"],
+  ["Middle-Earth: Shadow of Mordor/War","acao",15,"Rápido",3,"Média","Sistema Nêmesis genial / Ação fluida"],
+  ["Dark Souls 2","souls",35,"Médio",1,"Alta","Exploração densa / Builds diversas"],
+  ["Bulletstorm: Full Clip Edition","fps",8,"Rápido",1,"Baixa","Criatividade violenta / Humor trash / Ritmo absurdo"],
+  ["Vampyr","rpg",15,"Médio",2,"Média","Dilema moral / Narrativa dark / RPG vampírico"],
+  ["Sunset Overdrive","acao",10,"Rápido",1,"Baixa","Movimento fluido irresistível / Humor exagerado"],
+  ["Dishonored 2 + Death of the Outsider","acao",20,"Médio",1,"Média","Stealth criativo / Poderes únicos / Rejogabilidade"],
+  ["Everspace 1","simulacao",15,"Médio",2,"Média","Exploração espacial roguelike / Combate satisfatório"],
+  ["The Evil Within","terror",15,"Médio",1,"Alta","Terror tático / Tensão psicológica constante"],
+  ["A Plague Tale: Innocence / Requiem","narrativa",20,"Rápido",1,"Média","Narrativa emocional brutal / Atmosfera medieval"],
+  ["Spider-Man: Shattered Dimensions","acao",10,"Rápido",2,"Baixa","Combate variado / Nostalgia do Homem-Aranha"],
+  ["Sleeping Dogs","acao",15,"Rápido",2,"Baixa","Artes marciais satisfatórias / Hong Kong vivo"],
+  ["Darksiders 3","acao",15,"Médio",2,"Média","Combate estiloso / Exploração / Chefes"],
+  ["The Dark Pictures Anthology","terror",6,"Rápido",1,"Média","Terror narrativo com escolhas / Curto e intenso"],
+  ["Apsulov: End of Gods","terror",8,"Médio",1,"Alta","Terror sci-fi + mitologia nórdica / Atmosfera única"],
+  ["Stranglehold","fps",8,"Rápido",1,"Baixa","Bullet time estiloso / John Woo / Ação clássica"],
+  ["Half-Life: Source Quadrilogy","fps",25,"Rápido",1,"Média","FPS fundacional / Narrativa ambiental"],
+  ["Half-Life: Alyx","fps",8,"Rápido",1,"Média","FPS narrativo / Canon Half-Life"],
+  ["F.E.A.R.","fps",10,"Rápido",1,"Média","IA inimiga excelente / Tensão / Combate fluido"],
+  ["GRID: Ultimate Edition","corrida",20,"Rápido",2,"Baixa","Corrida realista / Competição satisfatória"],
+  ["Prototype 2","acao",10,"Rápido",2,"Baixa","Poderes caóticos / Sandbox violento / Diversão boba"],
+  ["Song of Horror","terror",8,"Médio",1,"Alta","Terror clássico procedural / Atmosfera pesada"],
+  ["Persona 5 Royal","rpg",100,"Lento",2,"Média","Jazz/Pop absurdo / Estilo visual / Narrativa social"],
+  ["Persona 3 Reload","rpg",50,"Lento",2,"Média","Tom sombrio / Narrativa existencial / Remake moderno"],
+  ["Chorus","fps",15,"Rápido",1,"Média","Combate espacial fluido / Narrativa sci-fi"],
+  ["Underspace","simulacao",30,"Médio",2,"Alta","Exploração espacial livre / Sandbox profundo"],
+  ["Starpoint Gemini 3","simulacao",20,"Médio",3,"Alta","Simulação espacial / Combate / Exploração livre"],
+  ["Twin Mirror","narrativa",5,"Rápido",1,"Baixa","Thriller psicológico curto / Narrativa"],
+  ["Nier: Automata","acao",25,"Médio",1,"Média","Narrativa filosófica impactante / Combate fluido"],
+  ["Fatal Frame: Maiden of Black Water","terror",12,"Médio",1,"Alta","Terror fotográfico atmosférico / Narrativa trágica"],
+  ["Fatal Frame: Mask of the Lunar Eclipse","terror",10,"Médio",1,"Alta","Terror fotográfico / Atmosfera densa"],
+  ["Star Wars Jedi: Fallen Order / Survivor","acao",20,"Rápido",1,"Média","Combate preciso / Exploração / Fan service fiel"],
+  ["Psychonauts 1 & 2","acao",12,"Rápido",1,"Baixa","Criatividade surreal / Plataforma / Humor brilhante"],
+  ["Terminator: Resistance","fps",15,"Médio",2,"Média","Fan service T1/T2 / Atmosfera fiel / FPS competente"],
+  ["RoboCop: Rogue City","fps",15,"Rápido",1,"Baixa","Fan service irresistível / FPS nostálgico / Humor"],
+  ["Halo: The Master Chief Collection","fps",40,"Rápido",2,"Média","FPS fundacional / Narrativa sci-fi épica"],
+  ["Halo Wars 2","estrategia",10,"Rápido",2,"Média","RTS acessível / Escala épica no universo Halo"],
+  ["Mafia: Definitive Edition","narrativa",10,"Médio",1,"Média","Narrativa gangster impecável / Atmosfera anos 30"],
+  ["Destroy All Humans! 2: Reprobed","acao",10,"Rápido",2,"Baixa","Humor trash / Poderes alien / Sandbox caótico"],
+  ["Captain Tsubasa: Rise of New Champions","corrida",20,"Médio",2,"Baixa","Futebol anime estiloso / Absurdo visual delicioso"],
+  ["Stranger of Paradise: Final Fantasy Origin","rpg",25,"Rápido",1,"Alta","Combate técnico / Dark Fantasy / Narrativa cult bizarra"],
+  ["Atomic Heart","fps",15,"Médio",2,"Média","Visual soviético único / FPS sci-fi / Atmosfera forte"],
+  ["Returnal","souls",20,"Rápido",1,"Alta","Roguelike sci-fi frenético / Loop viciante / Tensão"],
+  ["The Wonderful 101","acao",12,"Rápido",1,"Alta","Combate caótico criativo / Energia absurda"],
+  ["The Quarry","terror",10,"Rápido",1,"Baixa","Terror narrativo / Escolhas com consequência real"],
+  ["Iron Harvest","estrategia",20,"Médio",2,"Alta","RTS dieselpunk visual / Estratégia sólida"],
+  ["Ratchet & Clank: Rift Apart","acao",12,"Rápido",1,"Baixa","Visual next-gen inacreditável / Diversão imediata"],
+  ["Amnesia: The Bunker","terror",8,"Rápido",1,"Alta","Terror de sobrevivência / Tensão máxima / Criatividade"],
+  ["Yakuza Kiwami 2","acao",18,"Médio",1,"Média","Máfia japonesa / Combate evoluído / História sólida"],
+  ["Kena: Bridge of Spirits","acao",12,"Rápido",1,"Média","Visual deslumbrante / Combate fluido / Emoção"],
+  ["Tales of Arise","rpg",40,"Médio",2,"Média","Combate action JRPG excelente / Narrativa cai no final"],
+  ["Final Fantasy VII Remake","rpg",35,"Médio",1,"Média","Ação tática dinâmica / Narrativa reimaginada"],
+  ["Banishers: Ghosts of New Eden","rpg",20,"Médio",1,"Média","Narrativa emocional / Dilema moral / Combate"],
+  ["The Callisto Protocol","terror",12,"Rápido",1,"Média","Terror sci-fi visceral / Atmosfera Dead Space"],
+  ["Alone in the Dark","terror",10,"Médio",2,"Média","Terror clássico modernizado / Investigação"],
+  ["System Shock (Remake)","fps",15,"Médio",1,"Alta","Immersive sim clássico / Desafio / Narrativa ambiental"],
+  ["Total War: Warhammer III","estrategia",60,"Lento",3,"Alta","Estratégia épica em escala massiva / WH40K"],
+  ["INDIKA","narrativa",5,"Rápido",1,"Média","Indie experimental filosófico / Único no mercado"],
+  ["Trepang2","fps",8,"Rápido",1,"Média","F.E.A.R. moderno / Combate frenético / Violência criativa"],
+  ["Nobody Wants to Die","narrativa",6,"Rápido",1,"Baixa","Noir sci-fi cinematográfico / Visual impressionante"],
+  ["Beyond Hanwell","terror",5,"Médio",1,"Alta","Terror indie denso / Atmosfera opressiva"],
+  ["Metaphor: ReFantazio","rpg",80,"Lento",2,"Alta","JRPG denso / Narrativa política madura"],
+  ["Outpost: Infinity Siege","estrategia",20,"Médio",2,"Alta","Tower defense + shooter / Defesa intensa"],
+  ["A Quiet Place: The Road Ahead","terror",8,"Rápido",1,"Alta","Terror stealth intenso / Fiel ao universo do filme"],
+  ["Until Dawn","terror",10,"Rápido",1,"Baixa","Terror narrativo / Escolhas com consequência real"],
+  ["Dragon's Dogma 2","rpg",35,"Médio",2,"Média","RPG ação dinâmico / Combate físico satisfatório"],
+  ["L.A. Noire","narrativa",20,"Médio",2,"Média","Investigação noir / Leitura facial única / Atmosfera anos 40"],
+  ["Max Payne 3","fps",10,"Rápido",1,"Baixa","Bullet time preciso / Narrativa sombria / Ritmo afiado"],
+  ["HOLLOWBODY","terror",6,"Médio",1,"Alta","Terror survival indie / Atmosfera PS1 modernizada"],
+  ["Final Fantasy VII Rebirth","rpg",60,"Lento",2,"Média","Ação tática épica / Requer contexto do Remake"],
+  ["Final Fantasy XVI","acao",35,"Rápido",1,"Média","Hack and slash épico / Drama político adulto"],
+  ["Age of Empires IV","estrategia",30,"Médio",2,"Alta","RTS clássico refinado / Estratégia histórica"],
+  ["Tempest Rising","estrategia",15,"Médio",2,"Alta","Espiritual do C&C / RTS clássico revigorado"],
+  ["Godsworn","estrategia",15,"Médio",2,"Alta","RTS mitologia nórdica / Estratégia tática"],
+  ["The Sinking City Remastered","narrativa",15,"Médio",2,"Alta","Investigação Lovecraftiana / Atmosfera sombria"],
+  ["Warhammer 40,000: Rogue Trader","rpg",60,"Lento",2,"Alta","RPG tático WH40K profundo / Narrativa sombria"],
+  ["Still Wakes the Deep","terror",6,"Rápido",1,"Média","Terror atmosférico / Narrativa emocional / Curto e denso"],
+  ["Lies of P","souls",25,"Rápido",1,"Alta","Soulslike preciso e elegante / Narrativa Pinóquio sombria"],
+  ["Eriksholm: The Stolen Dream","narrativa",10,"Médio",1,"Média","Stealth narrativo / Atmosfera europeia única"],
+  ["Omori","rpg",15,"Médio",1,"Média","RPG psicológico perturbador / Narrativa emocionalmente impactante"],
+  ["SpongeBob: Battle for Bikini Bottom","acao",8,"Rápido",1,"Baixa","Plataforma nostálgica / Humor / Palate cleanser"],
+  ["Chicken Police","narrativa",5,"Rápido",1,"Baixa","Noir visual novel / Humor absurdo / Arte única"],
+  ["The Riftbreaker","estrategia",20,"Médio",2,"Alta","Tower defense + hack and slash / Ciclo viciante"],
+  ["Dispatch","narrativa",8,"Rápido",1,"Média","Thriller narrativo indie"],
+  ["Lost Records: Bloom & Rage","narrativa",8,"Rápido",1,"Baixa","Narrativa emocional / Nostalgia anos 90"],
+  ["Jurassic World Evolution 3","simulacao",25,"Médio",3,"Alta","Gestão de parque / Satisfação de construção"],
+  ["Dead Island 2","acao",20,"Rápido",2,"Baixa","Combate gore criativo / Humor / Zumbis com personalidade"],
+  ["Tormented Souls 1 & 2","terror",10,"Médio",1,"Alta","Terror clássico estilo RE / Puzzles / Atmosfera intensa"],
+  ["Age of Mythology: Retold","estrategia",20,"Médio",2,"Alta","RTS mitológico acessível / Unidades únicas"],
+  ["Echoes of the End","acao",15,"Médio",1,"Média","Ação indie / Aventura narrativa"],
+  ["Grand Theft Auto V Enhanced","acao",30,"Rápido",2,"Baixa","Sandbox criminal / Caos total / 3 protagonistas"],
+  ["Tainted Grail: The Fall of Avalon","rpg",40,"Médio",3,"Alta","RPG sombrio / Dark fantasy Arthurian"],
+  ["ROUTINE","terror",8,"Médio",1,"Alta","Terror sci-fi retro / Estação espacial abandonada"],
+  ["Screamer","corrida",5,"Rápido",1,"Baixa","Corrida retrô / Nostalgia pura"],
+  ["REPLACED","narrativa",8,"Médio",1,"Média","Cyberpunk 2.5D / Visual único / Narrativa"],
+  ["Dark Souls 2: Scholar of the First Sin","souls",35,"Médio",1,"Alta","Soulslike denso / Builds diversas / Exploração"]
+];
+
+const catLabel = {acao:"Ação",terror:"Terror",rpg:"RPG",souls:"Soulslike",narrativa:"Narrativa",fps:"FPS",estrategia:"Estratégia",corrida:"Corrida",simulacao:"Simulação",indie:"Indie"};
+const engOrder = {Rápido:1,Médio:2,Lento:3};
+const carOrder = {Baixa:1,Média:2,Alta:3,Máxima:4};
+
+let sortCol = null, sortDir = 1, activeQ = null;
+
+function filteredData() {
+  const s  = document.getElementById('srch').value.toLowerCase();
+  const fe = document.getElementById('fEngate').value;
+  const fv = document.getElementById('fValhalla').value;
+  const fc = document.getElementById('fCarga').value;
+  const ft = document.getElementById('fCat').value;
+
+  return G.filter(g => {
+    const [name,cat,dur,eng,val,car,dopa] = g;
+    if (s && !name.toLowerCase().includes(s) && !dopa.toLowerCase().includes(s)) return false;
+    if (fe && eng !== fe) return false;
+    if (fv && val > +fv) return false;
+    if (fc && car !== fc) return false;
+    if (ft && cat !== ft) return false;
+    if (activeQ === 'destruido' && (car !== 'Baixa' || eng !== 'Rápido')) return false;
+    if (activeQ === 'foco' && car !== 'Alta' && car !== 'Máxima') return false;
+    if (activeQ === 'historia' && cat !== 'narrativa' && cat !== 'rpg') return false;
+    if (activeQ === 'curto' && dur >= 15) return false;
+    if (activeQ === 'sempadding' && val > 1) return false;
+    return true;
+  });
+}
+
+function sorted(data) {
+  if (!sortCol) return data;
+  return [...data].sort((a,b) => {
+    if (sortCol==='name') return sortDir*a[0].localeCompare(b[0]);
+    if (sortCol==='cat')  return sortDir*a[1].localeCompare(b[1]);
+    if (sortCol==='dur')  return sortDir*(a[2]-b[2]);
+    if (sortCol==='eng')  return sortDir*(engOrder[a[3]]-engOrder[b[3]]);
+    if (sortCol==='val')  return sortDir*(a[4]-b[4]);
+    if (sortCol==='car')  return sortDir*(carOrder[a[5]]-carOrder[b[5]]);
+    return 0;
+  });
+}
+
+function render() {
+  const data = sorted(filteredData());
+  const tb = document.getElementById('tbody');
+  tb.innerHTML = '';
+  const dots = [1,2,3,4,5].map(()=>'<div class="vdot"></div>').join('');
+  data.forEach((g,i) => {
+    const [name,cat,dur,eng,val,car,dopa] = g;
+    const ec = eng==='Rápido'?'e-rapido':eng==='Médio'?'e-medio':'e-lento';
+    const cc = 'c-'+car.toLowerCase().replace(/[áàã]/g,'a').replace(/[éê]/g,'e').replace(/[í]/g,'i').replace(/[ó]/g,'o').replace(/[ú]/g,'u');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="td-n">${i+1}</td>
+      <td class="td-name">${name}</td>
+      <td class="td-cat"><span class="badge b-${cat}">${catLabel[cat]}</span></td>
+      <td class="td-dur">~${dur}h</td>
+      <td><span class="engate ${ec}">${eng}</span></td>
+      <td><div class="vbar v${val}">${dots}</div></td>
+      <td><span class="carga ${cc}">${car}</span></td>
+      <td class="td-dopa">${dopa}</td>`;
+    tb.appendChild(tr);
+  });
+  const n = data.length, tot = G.length;
+  document.getElementById('cVisible').textContent = n;
+  document.getElementById('rVisible').textContent = n;
+  document.getElementById('rTotal').textContent   = tot;
+  document.getElementById('empty').style.display  = n===0?'block':'none';
+}
+
+// Sort headers
+document.querySelectorAll('th[data-s]').forEach(th => {
+  th.style.cursor = 'pointer';
+  th.addEventListener('click', () => {
+    const c = th.dataset.s;
+    if (sortCol===c) sortDir*=-1; else { sortCol=c; sortDir=1; }
+    document.querySelectorAll('th[data-s]').forEach(t=>{ t.classList.remove('sorted'); t.querySelector('span').textContent='↕'; });
+    th.classList.add('sorted');
+    th.querySelector('span').textContent = sortDir===1?'↑':'↓';
+    render();
+  });
+});
+
+// Quick filters
+document.querySelectorAll('.qtag').forEach(b => {
+  b.addEventListener('click', () => {
+    const k = b.dataset.q;
+    if (activeQ===k) { activeQ=null; b.classList.remove('active'); }
+    else { activeQ=k; document.querySelectorAll('.qtag').forEach(x=>x.classList.remove('active')); b.classList.add('active'); }
+    render();
+  });
+});
+
+// Live filters
+['srch','fEngate','fValhalla','fCarga','fCat'].forEach(id => document.getElementById(id).addEventListener('input', render));
+['fEngate','fValhalla','fCarga','fCat'].forEach(id => document.getElementById(id).addEventListener('change', render));
+
+function reset() {
+  ['srch'].forEach(id => document.getElementById(id).value='');
+  ['fEngate','fValhalla','fCarga','fCat'].forEach(id => document.getElementById(id).value='');
+  activeQ=null; sortCol=null; sortDir=1;
+  document.querySelectorAll('.qtag').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('th[data-s]').forEach(t=>{ t.classList.remove('sorted'); t.querySelector('span').textContent='↕'; });
+  render();
+}
+
+function playNow() {
+  document.getElementById('fEngate').value   = 'Rápido';
+  document.getElementById('fValhalla').value = '2';
+  document.getElementById('fCarga').value    = 'Baixa';
+  activeQ=null; document.querySelectorAll('.qtag').forEach(b=>b.classList.remove('active'));
+  render();
+}
+
+// Init
+document.getElementById('cTotal').textContent = G.length;
+render();
+</script>
+</body>
+</html>
