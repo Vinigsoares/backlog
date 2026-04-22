@@ -172,6 +172,12 @@ td{padding:12px 14px;vertical-align:middle;font-size:13px;line-height:1.4;}
   cursor:pointer;border:1px solid rgba(255,45,120,.3);background:rgba(255,45,120,.06);
   color:var(--pink);transition:all .15s;white-space:nowrap;}
 .btn-unzero:hover{background:rgba(255,45,120,.15);}
+.btn-edit{font-family:var(--font-mono);font-size:10px;padding:3px 9px;border-radius:4px;
+  cursor:pointer;border:1px solid rgba(0,229,255,.3);background:rgba(0,229,255,.06);
+  color:var(--cyan);transition:all .15s;white-space:nowrap;margin-right:4px;}
+.btn-edit:hover{background:rgba(0,229,255,.15);}
+.legacy-tag{font-family:var(--font-mono);font-size:9px;color:var(--muted);
+  border:1px solid var(--border);padding:1px 6px;border-radius:3px;margin-left:6px;vertical-align:middle;}
 
 /* EXPORT/IMPORT */
 .data-bar{padding:10px 36px;background:var(--bg2);border-bottom:1px solid var(--border);
@@ -275,6 +281,7 @@ td{padding:12px 14px;vertical-align:middle;font-size:13px;line-height:1.4;}
     </select>
   </div>
   <button class="btn" onclick="resetFilters()">✕ Reset</button>
+  <button class="btn" style="border-color:var(--yellow);color:var(--yellow)" onclick="openAddGame()">＋ Adicionar Jogo</button>
   <button class="btn btn-playnow" onclick="playNow()">⚡ JOGAR AGORA</button>
 </div>
 
@@ -354,6 +361,100 @@ td{padding:12px 14px;vertical-align:middle;font-size:13px;line-height:1.4;}
     <span style="font-size:11px;opacity:.5;">Clique em "✓ Zerei" em qualquer jogo do backlog</span>
   </div>
 </div>
+</div>
+
+<!-- ADD/EDIT GAME MODAL -->
+<div class="modal-overlay" id="gameModalOverlay">
+  <div class="modal" style="max-width:560px">
+    <h2 class="modal-add" id="gameModalTitle">＋ ADICIONAR JOGO AO BACKLOG</h2>
+    <div class="modal-sub">Todos os campos com dropdown — zero digitação para valores controlados</div>
+    <div class="modal-grid">
+      <div class="mfield full">
+        <label>Nome do Jogo *</label>
+        <input type="text" id="gmNome" placeholder="Ex: Resident Evil 9" autocomplete="off">
+      </div>
+      <div class="mfield">
+        <label>Categoria *</label>
+        <select id="gmCat">
+          <option value="acao">Ação</option>
+          <option value="terror">Terror</option>
+          <option value="rpg">RPG</option>
+          <option value="souls">Soulslike</option>
+          <option value="narrativa">Narrativa</option>
+          <option value="fps">FPS</option>
+          <option value="estrategia">Estratégia</option>
+          <option value="corrida">Corrida</option>
+          <option value="simulacao">Simulação</option>
+          <option value="indie">Indie</option>
+        </select>
+      </div>
+      <div class="mfield">
+        <label>Plataforma *</label>
+        <select id="gmPlat">
+          <option value="PC">PC</option>
+          <option value="PS4">PS4 (shadPS4)</option>
+          <option value="PS3">PS3 (RPCS3)</option>
+          <option value="Switch">Switch (Ryujinx)</option>
+        </select>
+      </div>
+      <div class="mfield">
+        <label>Duração Campanha (horas) *</label>
+        <select id="gmDur">
+          <option value="3">~3h</option>
+          <option value="5">~5h</option>
+          <option value="6">~6h</option>
+          <option value="8">~8h</option>
+          <option value="10">~10h</option>
+          <option value="12">~12h</option>
+          <option value="15">~15h (padrão)</option>
+          <option value="20">~20h</option>
+          <option value="25">~25h</option>
+          <option value="30">~30h</option>
+          <option value="35">~35h</option>
+          <option value="40">~40h</option>
+          <option value="50">~50h</option>
+          <option value="60">~60h</option>
+          <option value="80">~80h</option>
+          <option value="100">~100h+</option>
+        </select>
+      </div>
+      <div class="mfield">
+        <label>🎣 Engate *</label>
+        <select id="gmEngate">
+          <option value="Rápido">⚡ Rápido — prende em minutos</option>
+          <option value="Médio">⏱ Médio — ~1-2 horas</option>
+          <option value="Lento">🐢 Lento — 3h+ até prender</option>
+        </select>
+      </div>
+      <div class="mfield">
+        <label>😴 Fator Valhalla (padding) *</label>
+        <select id="gmValhalla">
+          <option value="1">● 1 — Zero gordura</option>
+          <option value="2">●● 2 — Mínimo / ok</option>
+          <option value="3">●●● 3 — Médio / tolerável</option>
+          <option value="4">●●●● 4 — Pesado</option>
+          <option value="5">●●●●● 5 — Nível Valhalla</option>
+        </select>
+      </div>
+      <div class="mfield">
+        <label>🧠 Carga Cognitiva *</label>
+        <select id="gmCarga">
+          <option value="Baixa">🟢 Baixa — desligar o cérebro</option>
+          <option value="Média">🔵 Média — atenção moderada</option>
+          <option value="Alta">🟡 Alta — foco total</option>
+          <option value="Máxima">🔴 Máxima — café obrigatório</option>
+        </select>
+      </div>
+      <div class="mfield full">
+        <label>💉 Fator Dopamina (o que o jogo entrega)</label>
+        <input type="text" id="gmDopa" placeholder="Ex: Combate visceral / Narrativa emocional" autocomplete="off">
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="mbtn mbtn-cancel" onclick="closeGameModal()">Cancelar</button>
+      <button class="mbtn mbtn-confirm" style="background:var(--yellow);color:#000" onclick="confirmAddGame()">✓ Salvar no Backlog</button>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL -->
@@ -646,9 +747,21 @@ const engOrder = {Rápido:1,Médio:2,Lento:3};
 const carOrder = {Baixa:1,Média:2,Alta:3,Máxima:4};
 
 // ── STATE ─────────────────────────────────────────────
-let sortCol=null, sortDir=1, activeQ=null, pendingZero=null;
-let zerados = JSON.parse(localStorage.getItem('backlog_zerados')||'[]');
-let backlogNames = new Set(zerados.map(z=>z.nome));
+let sortCol=null, sortDir=1, activeQ=null, pendingZero=null, pendingEditMode=false;
+let pendingGameEdit=null; // name of game being edited (null = new game)
+let zerados = [];
+let backlogNames = new Set();
+let customGames = JSON.parse(localStorage.getItem('backlog_custom')||'[]');
+
+function saveCustomGames(){
+  localStorage.setItem('backlog_custom', JSON.stringify(customGames));
+}
+
+// Merge base + custom games
+function getAllGames(){
+  const custom = customGames.map(g=>[g.nome,g.cat,g.dur,g.eng,g.val,g.car,g.dopa,g.plat,'custom']);
+  return [...GAMES, ...custom];
+}
 
 // ── FILTER + RENDER ───────────────────────────────────
 function getActive() {
@@ -658,7 +771,7 @@ function getActive() {
   const fv=document.getElementById('fValhalla').value;
   const fc=document.getElementById('fCarga').value;
   const ft=document.getElementById('fCat').value;
-  return GAMES.filter(g=>{
+  return getAllGames().filter(g=>{
     const [name,cat,dur,eng,val,car,dopa,plat]=g;
     if(backlogNames.has(name)) return false;
     if(s && !name.toLowerCase().includes(s) && !dopa.toLowerCase().includes(s)) return false;
@@ -704,7 +817,7 @@ function renderBacklog(){
     const tr=document.createElement('tr');
     tr.innerHTML=`
       <td class="td-n">${i+1}</td>
-      <td class="td-name">${name}</td>
+      <td class="td-name">${name}${g[8]==='custom'?'<span class="custom-tag">CUSTOM</span>':''}</td>
       <td class="td-cat"><span class="badge b-${cat}">${catLabel[cat]}</span></td>
       <td><span class="plat ${pc}">${plat}</span></td>
       <td class="td-dur">~${dur}h</td>
@@ -712,10 +825,13 @@ function renderBacklog(){
       <td><div class="vbar v${val}">${dots}</div></td>
       <td><span class="carga ${cc}">${car}</span></td>
       <td class="td-dopa">${dopa}</td>
-      <td><button class="btn-zero" onclick="openModal('${name.replace(/'/g,"\\'")}')">✓ Zerei</button></td>`;
+      <td style="white-space:nowrap">
+        ${g[8]==='custom'?`<button class="btn-edit-game" onclick="openEditGame('${name.replace(/'/g,"\\'")}')">✏</button><button class="btn-del-game" onclick="deleteCustomGame('${name.replace(/'/g,"\\'")}')">✕</button>`:''}
+        <button class="btn-zero" onclick="openModal('${name.replace(/'/g,"\\'")}')">✓ Zerei</button>
+      </td>`;
     tb.appendChild(tr);
   });
-  const n=data.length, tot=GAMES.filter(g=>!backlogNames.has(g[0])).length;
+  const n=data.length, tot=getAllGames().filter(g=>!backlogNames.has(g[0])).length;
   document.getElementById('cVisible').textContent=n;
   document.getElementById('rVisible').textContent=n;
   document.getElementById('rTotal').textContent=tot;
@@ -729,7 +845,7 @@ function renderZerados(){
   tb.innerHTML='';
   const sorted=[...zerados].sort((a,b)=>new Date(b.data||0)-new Date(a.data||0));
   sorted.forEach((z,i)=>{
-    const nc=z.nota>=8?'n-high':z.nota>=6?'n-mid':'n-low';
+    const nc=!z.nota?'':z.nota>=8?'n-high':z.nota>=6?'n-mid':'n-low';
     const catEntry=GAMES.find(g=>g[0]===z.nome);
     const cat=catEntry?catEntry[1]:'acao';
     const plat=z.plataforma||'PC';
@@ -737,14 +853,17 @@ function renderZerados(){
     const tr=document.createElement('tr');
     tr.innerHTML=`
       <td class="td-n">${i+1}</td>
-      <td class="td-name">${z.nome}</td>
+      <td class="td-name">${z.nome}${z.legacy&&!z.nota?'<span class="legacy-tag">SEM NOTA</span>':''}</td>
       <td class="td-cat"><span class="badge b-${cat}">${catLabel[cat]||'—'}</span></td>
       <td><span class="plat ${pc}">${plat}</span></td>
       <td><span class="z-nota ${nc}">${z.nota||'—'}</span><span style="font-size:10px;color:var(--muted)">/10</span></td>
       <td class="td-dur">${z.horas?'~'+z.horas+'h':'—'}</td>
       <td style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">${z.data||'—'}</td>
       <td class="td-comment">${z.comment||'—'}</td>
-      <td><button class="btn-unzero" onclick="unzero('${z.nome.replace(/'/g,"\\'")}')">↩ Voltar</button></td>`;
+      <td style="white-space:nowrap">
+        <button class="btn-edit" onclick="editZero('${z.nome.replace(/'/g,"\\'")}')">✏ Editar</button>
+        <button class="btn-unzero" onclick="unzero('${z.nome.replace(/'/g,"\\'")}')">↩ Voltar</button>
+      </td>`;
     tb.appendChild(tr);
   });
   const avg=zerados.length?Math.round(zerados.filter(z=>z.nota).reduce((s,z)=>s+z.nota,0)/zerados.filter(z=>z.nota).length*10)/10:null;
@@ -766,6 +885,7 @@ function openModal(name){
 function closeModal(){
   document.getElementById('modalOverlay').classList.remove('open');
   pendingZero=null;
+  pendingEditMode=false;
 }
 function confirmZero(){
   if(!pendingZero) return;
@@ -774,9 +894,17 @@ function confirmZero(){
   const data=document.getElementById('mData').value||null;
   const plataforma=document.getElementById('mPlat').value;
   const comment=document.getElementById('mComment').value.trim()||null;
-  zerados.push({nome:pendingZero,nota,horas,data,plataforma,comment});
-  backlogNames.add(pendingZero);
+  if(pendingEditMode){
+    const idx=zerados.findIndex(z=>z.nome===pendingZero);
+    if(idx>-1){
+      zerados[idx]={...zerados[idx],nota,horas,data,plataforma,comment,legacy:false};
+    }
+  } else {
+    zerados.push({nome:pendingZero,nota,horas,data,plataforma,comment});
+    backlogNames.add(pendingZero);
+  }
   saveZerados();
+  pendingEditMode=false;
   closeModal();
   renderBacklog();
   renderZerados();
@@ -788,8 +916,91 @@ function unzero(name){
   renderBacklog();
   renderZerados();
 }
+function editZero(name){
+  // Open modal in edit mode
+  const existing = zerados.find(z=>z.nome===name);
+  if(!existing) return;
+  pendingZero = name;
+  pendingEditMode = true;
+  document.getElementById('modalGameName').textContent='// '+name;
+  document.getElementById('mNota').value = existing.nota||'';
+  document.getElementById('mHoras').value = existing.horas||'';
+  document.getElementById('mData').value = existing.data||new Date().toISOString().split('T')[0];
+  document.getElementById('mPlat').value = existing.plataforma||'PC';
+  document.getElementById('mComment').value = existing.comment||'';
+  document.getElementById('modalOverlay').classList.add('open');
+}
 function saveZerados(){
   localStorage.setItem('backlog_zerados',JSON.stringify(zerados));
+}
+
+// ── ADD/EDIT GAME FUNCTIONS ──────────────────────────
+function openAddGame(){
+  pendingGameEdit=null;
+  document.getElementById('gameModalTitle').textContent='＋ ADICIONAR JOGO AO BACKLOG';
+  document.getElementById('gmNome').value='';
+  document.getElementById('gmCat').value='acao';
+  document.getElementById('gmPlat').value='PC';
+  document.getElementById('gmDur').value='15';
+  document.getElementById('gmEngate').value='Rápido';
+  document.getElementById('gmValhalla').value='1';
+  document.getElementById('gmCarga').value='Média';
+  document.getElementById('gmDopa').value='';
+  document.getElementById('gameModalOverlay').classList.add('open');
+}
+
+function openEditGame(name){
+  const g=customGames.find(x=>x.nome===name);
+  if(!g) return;
+  pendingGameEdit=name;
+  document.getElementById('gameModalTitle').textContent='✏ EDITAR JOGO';
+  document.getElementById('gmNome').value=g.nome;
+  document.getElementById('gmCat').value=g.cat;
+  document.getElementById('gmPlat').value=g.plat;
+  document.getElementById('gmDur').value=String(g.dur);
+  document.getElementById('gmEngate').value=g.eng;
+  document.getElementById('gmValhalla').value=String(g.val);
+  document.getElementById('gmCarga').value=g.car;
+  document.getElementById('gmDopa').value=g.dopa||'';
+  document.getElementById('gameModalOverlay').classList.add('open');
+}
+
+function closeGameModal(){
+  document.getElementById('gameModalOverlay').classList.remove('open');
+  pendingGameEdit=null;
+}
+
+function confirmAddGame(){
+  const nome=document.getElementById('gmNome').value.trim();
+  if(!nome){alert('Nome obrigatório');return;}
+  const cat=document.getElementById('gmCat').value;
+  const plat=document.getElementById('gmPlat').value;
+  const dur=parseInt(document.getElementById('gmDur').value);
+  const eng=document.getElementById('gmEngate').value;
+  const val=parseInt(document.getElementById('gmValhalla').value);
+  const car=document.getElementById('gmCarga').value;
+  const dopa=document.getElementById('gmDopa').value.trim()||'—';
+  if(pendingGameEdit){
+    const idx=customGames.findIndex(x=>x.nome===pendingGameEdit);
+    if(idx>-1) customGames[idx]={nome,cat,plat,dur,eng,val,car,dopa};
+  } else {
+    // Check for duplicate
+    const all=getAllGames();
+    if(all.find(g=>g[0].toLowerCase()===nome.toLowerCase())){
+      alert('Jogo com esse nome já existe no backlog.');return;
+    }
+    customGames.push({nome,cat,plat,dur,eng,val,car,dopa});
+  }
+  saveCustomGames();
+  closeGameModal();
+  renderBacklog();
+}
+
+function deleteCustomGame(name){
+  if(!confirm('Remover "'+name+'" do backlog?')) return;
+  customGames=customGames.filter(g=>g.nome!==name);
+  saveCustomGames();
+  renderBacklog();
 }
 
 // ── EXPORT / IMPORT ───────────────────────────────────
@@ -827,7 +1038,7 @@ function switchTab(tab){
   document.getElementById('page-zerados').classList.toggle('active',tab==='zerados');
 }
 function updateTabCounts(){
-  const active=GAMES.filter(g=>!backlogNames.has(g[0])).length;
+  const active=getAllGames().filter(g=>!backlogNames.has(g[0])).length;
   document.getElementById('tc-backlog').textContent=active;
   document.getElementById('tc-zerados').textContent=zerados.length;
 }
@@ -861,6 +1072,7 @@ document.querySelectorAll('.qtag').forEach(b=>{
 
 // ── MODAL CLOSE ON OVERLAY ────────────────────────────
 document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+document.getElementById('gameModalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeGameModal();});
 
 function resetFilters(){
   document.getElementById('srch').value='';
@@ -879,6 +1091,22 @@ function playNow(){
 }
 
 // ── INIT ──────────────────────────────────────────────
+// Pre-populate legacy zerados if first time
+(function(){
+  const LEGACY_KEY = 'backlog_legacy_loaded_v1';
+  if(!localStorage.getItem(LEGACY_KEY)){
+    const existing = JSON.parse(localStorage.getItem('backlog_zerados')||'[]');
+    if(existing.length === 0){
+      const legacy = [{"nome": "Tekken 8", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Stray", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Doom: The Dark Ages", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Resident Evil 2 Remake", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Resident Evil 8: Village", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Batman: Arkham City", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Batman: Arkham Asylum", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Mad Max", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Martha is Dead", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Call of Cthulhu", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Splinter Cell: Double Agent", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Watch Dogs 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Watch Dogs", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Red Dead Redemption", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Prey (2017)", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Deus Ex: Mankind Divided", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Fallout 4", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "A Plague Tale: Requiem", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Somerville", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "High on Life", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Ori and the Will of the Wisps", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Yakuza Kiwami 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Yakuza 0", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Chorus", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Life is Strange: True Colors", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Alien: Isolation", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Scarlet Nexus", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Guardians of the Galaxy", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "The Outer Worlds", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Medal of Honor: Airborne", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Haunted: The Demon's Forge", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Kingdom Hearts 3", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "The Medium", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Bloodstained: Ritual of the Night", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Devil May Cry 5", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Wolfenstein: The Old Blood", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Wolfenstein 2: The New Colossus", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Backbone", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Yes, Your Grace", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Titanfall 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Control", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Resident Evil 7", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Carrion", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Observation", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Darksiders Genesis", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "A Plague Tale: Innocence", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Doom Eternal", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Binary Domain", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Resident Evil 0", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Fran Bow", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Blair Witch", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Tomb Raider (2013)", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Wolfenstein: The New Order", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Gears of War 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Gears of War 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Gears of War 3", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Gears of War 4", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Gears of War 5", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Metro: Last Light", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Observer", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Quantum Break", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Doom (2016)", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Darksiders 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Darksiders 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Resident Evil: Revelations 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Kane & Lynch 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Kane & Lynch 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Knights of the Old Republic 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Ori and the Blind Forest", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Resident Evil HD Remaster", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Metro 2033", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "DmC: Devil May Cry (2013)", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Deadpool", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Assassin's Creed: Revelations", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "BioShock Infinite", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Castlevania: Lords of Shadow", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "The Wolf Among Us", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "The Walking Dead: Season 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "The Walking Dead: Season 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Resident Evil: Revelations", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Syndicate (2012)", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Sleeping Dogs", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "The Suffering 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Dishonored", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Dark Souls", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Warhammer 40,000: Space Marine", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Warhammer 40,000: Dawn of War II", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Clive Barker's Jericho", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Cold Fear", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "The Darkness 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Max Payne 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Max Payne 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Max Payne 3", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Portal", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Bulletstorm", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Dead Island", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Trine 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Trine 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Limbo", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Saints Row: The Third", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Duke Nukem Forever", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Dead Space 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Dead Space 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Dark Sector", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Mafia II", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "007: Blood Stone", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Mass Effect 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Mass Effect 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Mass Effect 3", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "F.E.A.R.", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "F.E.A.R. 2: Project Origin", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "F.E.A.R. 3", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "BioShock 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "BioShock 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Vampire: The Masquerade – Bloodlines", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "GRID", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Silent Hill 4: The Room", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Half-Life 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Half-Life: Opposing Force", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Half-Life: Blue Shift", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Half-Life 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Half-Life 2: Episode 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Half-Life 2: Episode 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Quake 4", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Spec Ops: The Line", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Doom 3", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Dark Messiah of Might and Magic", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Splinter Cell: Conviction", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Splinter Cell: Chaos Theory", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "The Elder Scrolls IV: Oblivion", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Command & Conquer 3", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Prince of Persia: Warrior Within", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Prince of Persia: The Two Thrones", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Resident Evil 5", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Hitman: Blood Money", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Hitman: Absolution", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Condemned: Criminal Origins", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Borderlands", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Call of Juarez: Bound in Blood", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Indigo Prophecy", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Call of Duty 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Call of Duty 4: Modern Warfare", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Call of Duty: World at War", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Call of Duty: Modern Warfare 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Rainbow Six Vegas 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Crysis 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Crysis Warhead", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Crysis 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Fallout 3", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Dead Rising 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Blur", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Medal of Honor (2010)", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "El Matador", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Red Faction: Guerrilla", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Warcraft 3", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Obscure 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Prototype", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Spider-Man: Web of Shadows", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Heretic", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Torchlight", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Fable I", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "BlackSite: Area 51", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Painkiller", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Guitar Hero III", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Guitar Hero: World Tour", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Dragon Age: Origins", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "X-Men Origins: Wolverine", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Battlefield: Bad Company 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Assassin's Creed 1", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Assassin's Creed 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Assassin's Creed: Brotherhood", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Unreal Tournament 2004", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Sniper: Ghost Warrior", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Devil May Cry 3", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Devil May Cry 4", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Star Wars: The Force Unleashed II", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "DiRT 2", "nota": null, "horas": null, "data": null, "plataforma": "PC", "comment": null, "legacy": true}, {"nome": "Donkey Kong Country 1", "nota": null, "horas": null, "data": null, "plataforma": "Switch", "comment": null, "legacy": true}, {"nome": "Donkey Kong Country 2", "nota": null, "horas": null, "data": null, "plataforma": "Switch", "comment": null, "legacy": true}, {"nome": "Donkey Kong Country 3", "nota": null, "horas": null, "data": null, "plataforma": "Switch", "comment": null, "legacy": true}, {"nome": "Super Mario World", "nota": null, "horas": null, "data": null, "plataforma": "Switch", "comment": null, "legacy": true}];
+      localStorage.setItem('backlog_zerados', JSON.stringify(legacy));
+      localStorage.setItem(LEGACY_KEY, '1');
+    }
+  }
+})();
+
+zerados = JSON.parse(localStorage.getItem('backlog_zerados')||'[]');
+customGames = JSON.parse(localStorage.getItem('backlog_custom')||'[]');
+backlogNames = new Set(zerados.map(z=>z.nome));
 renderBacklog();
 renderZerados();
 </script>
